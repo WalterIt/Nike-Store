@@ -9,15 +9,17 @@ import { useState } from "react";
 import {
   heroapi,
   popularsales,
-  toprateslaes,
+  topratesales,
   highlight,
   sneaker,
   story,
   footerAPI,
 } from "./data/products.js";
 
+// const heroapi = {}
+
 function App() {
-  const [viewCart, setViewCart] = useState(false);
+  // const [viewCart, setViewCart] = useState(false);
 
   return (
     <>
@@ -25,11 +27,13 @@ function App() {
       <Cart />
       <main className="flex flex-col gap-16 relative ">
         <Hero heroapi={heroapi} />
-        <Sales />
-        <FlexContent />
-        <Stories />
-        <Footer />
+        <Sales endpoint={popularsales} ifExists />
+        <FlexContent endpoint={highlight} ifExists />
+        <Sales endpoint={topratesales} />
+        <FlexContent endpoint={sneaker} />
+        <Stories story={story} />
       </main>
+      <Footer footerAPI={footerAPI} />
     </>
   );
 }

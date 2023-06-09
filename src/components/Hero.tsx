@@ -1,9 +1,27 @@
 import SocialLinks from "./utils/SocialLinks";
 import Clips from "./utils/Clips";
 
+type PropsType = {
+  heroapi: {
+    title: string;
+    subtitle: string;
+    btntext: string;
+    img: string;
+    sociallinks: {
+      icon: string;
+    }[];
+    videos: {
+      imgsrc: string;
+      clip: string;
+    }[];
+  };
+  // videos: string[];
+  // sociallinks: string[];
+};
+
 const Hero = ({
   heroapi: { title, subtitle, btntext, img, sociallinks, videos },
-}) => {
+}: PropsType) => {
   return (
     <>
       <div className="relative h-auto w-auto flex flex-col">
