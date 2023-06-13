@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
 import logo from "../../assets/logo.png";
+import useCart from "../hooks/useCart";
 
-const Header = () => {
+const Header = ({ onCartToggle }) => {
+  const { totalItems } = useCart();
   const [navState, setNavState] = useState(false);
-  const [openCart, setOpenCart] = useState(false);
-
-  const onCartToggle = () => {
-    setOpenCart(true);
-  };
 
   const onNavScroll = () => {
     if (window.scrollY > 30) {
@@ -105,7 +102,7 @@ const Header = () => {
                     : "bg-slate-100 text-slate-900 shadow shadow-slate-100"
                 } `}
               >
-                0
+                {+totalItems}
               </div>
             </button>
           </li>

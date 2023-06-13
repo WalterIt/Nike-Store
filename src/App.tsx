@@ -15,21 +15,30 @@ import {
   story,
   footerAPI,
 } from "./data/products.js";
-
-// const heroapi = {}
+import { UseProductsContextType } from "./context/ProductsProvider.js";
+import useProducts from "./components/hooks/useProducts.js";
+import useCart from "./components/hooks/useCart.js";
 
 function App() {
-  // const [viewCart, setViewCart] = useState(false);
+  // const { dispatch, REDUCER_ACTIONS, cart } = useCart();
+  const { products } = useProducts();
+  const [openCart, setOpenCart] = useState(false);
+  const [ifCartState, setIfCartState] = useState(false);
+
+  const onCartToggle = () => {
+    setOpenCart(!openCart);
+    setIfCartState(!ifCartState);
+  };
 
   return (
     <>
-      <Header />
-      <Cart />
+      <Header onCartToggle={onCartToggle} />
+      <Cart onCartToggle={onCartToggle} ifCartState={ifCartState} />
       <main className="flex flex-col gap-16 relative ">
         <Hero heroapi={heroapi} />
-        <Sales endpoint={popularsales} ifExists />
+        <Sales products={popularsales} ifExists />
         <FlexContent endpoint={highlight} ifExists />
-        <Sales endpoint={topratesales} />
+        <Sales products={products[0]} />
         <FlexContent endpoint={sneaker} />
         <Stories story={story} />
       </main>

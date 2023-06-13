@@ -1,15 +1,16 @@
 import { ReactElement, createContext, useMemo, useReducer } from "react";
 
 export type CartItemType = {
+  // product: CartItem;
   id: string;
-  title: string;
-  text: string;
-  rating: string;
-  btn: string;
-  img: string;
-  price: string;
   color: string;
   shadow: string;
+  title: string;
+  text: string;
+  img: string;
+  btn: string;
+  rating: string;
+  price: string;
   quantity: number;
 };
 
@@ -19,6 +20,7 @@ const initCartState: CartStateType = { cart: [] };
 
 const REDUCER_ACTION_TYPE = {
   ADD: "ADD",
+  SUBTRACT: "SUBTRACT",
   REMOVE: "REMOVE",
   QUANTITY: "QUANTITY",
   SUBMIT: "SUBMIT",
@@ -41,18 +43,8 @@ const reducer = (
         throw new Error("No payload in ADD action!");
       }
 
-      const {
-        id,
-        title,
-        text,
-        rating,
-        btn,
-        img,
-        price,
-        color,
-        shadow,
-        quantity,
-      } = action.payload;
+      const { id, color, shadow, title, text, img, btn, rating, price } =
+        action.payload;
 
       const filteredCart: CartItemType[] = state.cart.filter(
         (item) => item.id !== id
@@ -62,27 +54,66 @@ const reducer = (
         (item) => item.id === id
       );
 
-      const qty: number = itemExists ? itemExists?.quantity + 1 : 1;
+      const quantity: number = itemExists ? itemExists?.quantity + 1 : 1;
 
       return {
         ...state,
         cart: [
-          ...filteredCart,
           {
             id,
-            title,
-            text,
-            rating,
-            btn,
-            img,
-            price,
             color,
             shadow,
-            quantity: qty,
+            title,
+            text,
+            img,
+            btn,
+            rating,
+            price,
+            quantity,
           },
+          ...filteredCart,
         ],
       };
     }
+
+    case REDUCER_ACTION_TYPE.SUBTRACT: {
+      if (!action.payload) {
+        throw new Error("No payload in ADD action!");
+      }
+
+      const { id, color, shadow, title, text, img, btn, rating, price } =
+        action.payload;
+
+      const filteredCart: CartItemType[] = state.cart.filter(
+        (item) => item.id !== id
+      );
+
+      const itemExists: CartItemType | undefined = state.cart.find(
+        (item) => item.id === id
+      );
+
+      const quantity: number = itemExists ? itemExists?.quantity - 1 : 1;
+
+      return {
+        ...state,
+        cart: [
+          {
+            id,
+            color,
+            shadow,
+            title,
+            text,
+            img,
+            btn,
+            rating,
+            price,
+            quantity,
+          },
+          ...filteredCart,
+        ],
+      };
+    }
+
     case REDUCER_ACTION_TYPE.REMOVE: {
       if (!action.payload) {
         throw new Error("No payload in REMOVE action!");

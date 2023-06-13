@@ -1,43 +1,62 @@
-import { useState } from "react";
+import { ReactElement, useState } from "react";
+import { ProductType, ProductItem } from "../../context/ProductsProvider";
+import { ReducerActionType, ReducerAction } from "../../context/CartProvider";
+import { CartItemType } from "../../context/CartProvider";
+
+// type PropsType = {
+//   product: ProductType;
+//   dispatch: React.Dispatch<ReducerAction>;
+//   REDUCER_ACTIONS: ReducerActionType;
+//   inCart: boolean;
+//   ifExists?: boolean | undefined;
+// };
 
 type PropsType = {
   ifExists?: boolean | undefined;
-  id: string;
-  color: string;
-  shadow: string;
-  title: string;
-  text: string;
-  img: string;
-  btn: string;
-  rating: number;
-  price: number;
+  dispatch: React.Dispatch<ReducerAction>;
+  REDUCER_ACTIONS: ReducerActionType;
+  inCart: boolean;
+  product: ProductItem;
+  // id: string;
+  // color: string;
+  // shadow: string;
+  // title: string;
+  // text: string;
+  // img: string;
+  // btn: string;
+  // rating: string;
+  // price: string;
 };
 
 const Item = ({
   ifExists,
-  id,
-  color,
-  shadow,
-  title,
-  text,
-  img,
-  btn,
-  rating,
-  price,
-}: PropsType) => {
+  dispatch,
+  REDUCER_ACTIONS,
+  inCart,
+  product,
+  product: {
+    id,
+    color,
+    shadow,
+    title,
+    text,
+    img,
+    btn,
+    rating,
+    price,
+    quantity,
+  },
+}: PropsType): ReactElement => {
   const [openCart, setOpenCart] = useState(false);
 
   const onAddToCart = () => {
-    const item = {
-      id,
-      color,
-      shadow,
-      title,
-      text,
-      img,
-      price,
-    };
+    dispatch({
+      type: REDUCER_ACTIONS.ADD,
+      payload: { ...product, quantity: 1 },
+    });
   };
+
+  const itemInCart = inCart ? "✔️" : "";
 
   const onCartToggle = () => {
     setOpenCart(!openCart);
@@ -66,7 +85,7 @@ const Item = ({
               {new Intl.NumberFormat("en-US", {
                 style: "currency",
                 currency: "USD",
-              }).format(price)}
+              }).format(+price)}
             </h1>
           </div>
           <div className="flex items-center justify-center gap-2 ">

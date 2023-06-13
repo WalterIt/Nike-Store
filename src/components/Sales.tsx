@@ -1,25 +1,16 @@
 import Item from "./utils/Item";
 import Title from "./utils/Title";
+import { ProductType } from "../context/ProductsProvider";
+import useCart from "./hooks/useCart";
 
 type PropsType = {
-  endpoint: {
-    title: string;
-    items: {
-      id: string;
-      color: string;
-      shadow: string;
-      title: string;
-      text: string;
-      img: string;
-      btn: string;
-      rating: number;
-      price: number;
-    }[];
-  };
+  products: ProductType;
   ifExists?: boolean | undefined;
 };
 
-function Sales({ ifExists, endpoint: { title, items } }: PropsType) {
+function Sales({ ifExists, products: { title, items } }: PropsType) {
+  const { dispatch, REDUCER_ACTIONS, cart } = useCart();
+
   return (
     <div className="nike-container">
       <Title title={title} />
@@ -30,9 +21,20 @@ function Sales({ ifExists, endpoint: { title, items } }: PropsType) {
             : "grid-cols-4 xl:grid-cols-3 md:grid-cols-2 sm:grid-cols-1"
         } `}
       >
-        {items?.map((item, i) => (
-          <Item key={i} {...item} ifExists={ifExists} />
-        ))}
+        {items?.map((product, i) => {
+          const inCart: boolean = cart.some((item) => item.id === product.id);
+
+          return (
+            <Item
+              key={i}
+              product={product}
+              ifExists={ifExists}
+              dispatch={dispatch}
+              inCart={inCart}
+              REDUCER_ACTIONS={REDUCER_ACTIONS}
+            />
+          );
+        })}
       </div>
     </div>
   );
